@@ -26,32 +26,25 @@ A dual‑track guide to the Retrieval‑Augmented Generation (RAG) pipeline —
 
 ---
 
+Got it—here’s the full section, all five parts, with centered “true” formulas styled for GitHub README:
+
+---
+
 ## 📐 Mathematical Foundations
 
 ### 1. Document Chunking
 
-Let `D = {d₁, d₂, ..., dₙ}` be a dataset of documents. Each document `dᵢ` is segmented into smaller textual chunks `cᵢⱼ`, forming a new collection:
+Let \( D = \{d₁, d₂, \dots, dₙ\} \) be a dataset of documents. Each document \( dᵢ \) is segmented into smaller textual chunks \( cᵢⱼ \), forming a new collection:
 
-```
-C = {c₁₁, c₁₂, ..., cₙₘ}
-```
-
-This enables fine-grained embedding and retrieval.
+<p align="center"><strong>C = {c₁₁, c₁₂, ..., cₙₘ}</strong></p>
 
 ---
 
 ### 2. Embedding Function
 
-Each chunk `c ∈ C` is mapped into a high-dimensional vector space via an embedding function `f`:
+Each chunk \( c \in C \) is mapped into a high-dimensional vector space via an embedding function \( f \):
 
-```
-v_c = f(c) ∈ ℝᵈ
-```
-
-The embedding function depends on the provider:
-
-- If using OpenAI: `f = f_OpenAI`
-- If using TogetherAI: `f = f_Together`
+<p align="center"><strong>v<sub>c</sub> = f(c) ∈ ℝᵈ</strong></p>
 
 ---
 
@@ -59,44 +52,33 @@ The embedding function depends on the provider:
 
 All chunk embeddings are stored in a FAISS index:
 
-```
-V = {v_c₁, v_c₂, ..., v_c_k}
-```
+<p align="center"><strong>V = {v<sub>c₁</sub>, v<sub>c₂</sub>, ..., v<sub>cₖ</sub>}</strong></p>
 
-Similarity between a query vector `q` and a chunk vector `v_c` is computed using cosine similarity:
+Similarity between a query vector \( q \) and a chunk vector \( v_c \) is computed using cosine similarity:
 
-```
-sim(q, v_c) = (q ⋅ v_c) / (‖q‖ ⋅ ‖v_c‖)
-```
+<p align="center"><strong>sim(q, v<sub>c</sub>) = (q · v<sub>c</sub>) / (‖q‖ · ‖v<sub>c</sub>‖)</strong></p>
 
 ---
 
 ### 4. Retrieval
 
-Given a user query `q`, we first embed it:
+Given a user query \( q \), we first embed it:
 
-```
-q = f(q)
-```
+<p align="center"><strong>q = f(q)</strong></p>
 
-We then retrieve the top-k most similar chunks:
+We then retrieve the top‑k most similar chunks:
 
-```
-R(q) = arg_topk_{c ∈ C} sim(q, v_c)
-```
+<p align="center"><strong>R(q) = arg<sub>top‑k</sub><sub>c ∈ C</sub> sim(q, v<sub>c</sub>)</strong></p>
 
 ---
 
 ### 5. Augmented Generation
 
-The retrieved chunks `R(q)` are concatenated with the query and passed to the language model:
+The retrieved chunks \( R(q) \) are concatenated with the query and passed to the language model:
 
-```
-Answer(q) = LLM(q ⊕ R(q))
-```
+<p align="center"><strong>Answer(q) = LLM(q ⊕ R(q))</strong></p>
 
-Here, `⊕` denotes the concatenation of the query and its retrieved context.
-
+Here, ⊕ denotes the concatenation of the query and its retrieved context.
 
 ---
 
