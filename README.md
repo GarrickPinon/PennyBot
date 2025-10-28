@@ -1,11 +1,6 @@
 # PennyBot
 PennyBot is a CLI-native finance assistant built around Hugging Face’s FinanceBench and FinDER. She combines benchmark analysis with conversational discovery, enabling users to explore datasets, decode financial signals, and stress-test pipelines with audit-grade precision.
 
-
-Yes — what you’ve scaffolded here *does* carry over the spirit of the “deep research leg” we worked through earlier. The mathematical side is the distilled theory (document splitting → embeddings → FAISS similarity → retrieval → augmented generation), and the codebook side is the translation into reproducible Python modules. That dual‑track structure is exactly what makes it read like a textbook *and* a developer’s manual at once.
-
-Here’s how I’d polish it into a **README.md** you can drop straight into GitHub — with a table of contents, emojis for readability, and consistent formatting:
-
 ---
 
 # 📘 RAG Agent: Mathematical Foundations & Codebook
@@ -31,144 +26,77 @@ A dual‑track guide to the Retrieval‑Augmented Generation (RAG) pipeline —
 
 ---
 
-## Part I. Mathematical Foundations (Textbook Style)
+## 📐 Mathematical Foundations
 
-### 1. Document Representation
-We start with a dataset of text entries \( D = \{d_1, d_2, \dots, d_n\} \).  
-Each document \( d_i \) is split into smaller chunks \( c_{ij} \):
+### 1. Document Chunking
 
-\[
-D \;\;\longrightarrow\;\; C = \{c_{11}, c_{12}, \dots, c_{nm}\}
-\]
+Let `D = {d₁, d₂, ..., dₙ}` be a dataset of documents. Each document `dᵢ` is segmented into smaller textual chunks `cᵢⱼ`, forming a new collection:
+
+```
+C = {c₁₁, c₁₂, ..., cₙₘ}
+```
+
+This enables fine-grained embedding and retrieval.
 
 ---
 
 ### 2. Embedding Function
-Each chunk \( c \) is mapped into a high‑dimensional vector space via an embedding function \( f \):
 
-\[
-\mathbf{v}_c = f(c) \in \mathbb{R}^d
-\]
+Each chunk `c ∈ C` is mapped into a high-dimensional vector space via an embedding function `f`:
 
-- If using OpenAI: \( f = f_{\text{OpenAI}} \)  
-- If using TogetherAI: \( f = f_{\text{Together}} \)
+```
+v_c = f(c) ∈ ℝᵈ
+```
+
+The embedding function depends on the provider:
+
+- If using OpenAI: `f = f_OpenAI`
+- If using TogetherAI: `f = f_Together`
 
 ---
 
 ### 3. Vector Store Construction
-All embeddings are stored in a FAISS index:
-Yes—I can see the full math section from your PennyBot README, and I can absolutely rewrite it to feel more textbook-like. Let’s ritualize it with clarity, structure, and academic tone:
-
----
-
-### 📘 Part I. Mathematical Foundations (Textbook Style)
-
-#### 1. Document Representation
-
-Let \( D = \{d_1, d_2, \dots, d_n\} \) be a dataset consisting of \( n \) documents. Each document \( d_i \) is segmented into smaller textual chunks \( c_{ij} \), resulting in a new collection:
-
-\[
-D \longrightarrow C = \{c_{11}, c_{12}, \dots, c_{nm}\}
-\]
-
-This chunking process enables fine-grained embedding and retrieval.
-
----
-
-#### 2. Embedding Function
-
-Each chunk \( c \in C \) is mapped into a high-dimensional vector space via an embedding function \( f \):
-
-\[
-\mathbf{v}_c = f(c) \in \mathbb{R}^d
-\]
-
-The embedding provider may vary:
-- If using OpenAI: \( f = f_{\text{OpenAI}} \)
-- If using TogetherAI: \( f = f_{\text{Together}} \)
-
----
-
-#### 3. Vector Store Construction
 
 All chunk embeddings are stored in a FAISS index:
 
-\[
-V = \{\mathbf{v}_{c_1}, \mathbf{v}_{c_2}, \dots, \mathbf{v}_{c_k}\}
-\]
+```
+V = {v_c₁, v_c₂, ..., v_c_k}
+```
 
-Similarity between a query vector \( \mathbf{q} \) and a chunk vector \( \mathbf{v}_c \) is computed using cosine similarity:
+Similarity between a query vector `q` and a chunk vector `v_c` is computed using cosine similarity:
 
-\[
-\text{sim}(\mathbf{q}, \mathbf{v}_c) = \frac{\mathbf{q} \cdot \mathbf{v}_c}{\|\mathbf{q}\| \cdot \|\mathbf{v}_c\|}
-\]
-
----
-
-#### 4. Retrieval
-
-Given a user query \( q \), we first embed it:
-
-\[
-\mathbf{q} = f(q)
-\]
-
-We then retrieve the top-\( k \) most similar chunks:
-
-\[
-R(q) = \operatorname{arg\,topk}_{c \in C} \text{sim}(\mathbf{q}, \mathbf{v}_c)
-\]
-
----
-
-#### 5. Augmented Generation
-
-The retrieved chunks \( R(q) \) are concatenated with the query and passed to the language model:
-
-\[
-\text{Answer}(q) = \text{LLM}\big(q \oplus R(q)\big)
-\]
-
-Here, \( \oplus \) denotes the concatenation of the query and its retrieved context.
-
----
-
-This version reads like a graduate-level textbook—clean, precise, and modular. Want me to scaffold a matching diagram or log this as a lore entry in your memoir? I’m ready to deploy.
-\[
-V = \{\mathbf{v}_{c_1}, \mathbf{v}_{c_2}, \dots, \mathbf{v}_{c_k}\}
-\]
-
-Similarity search is performed using cosine similarity:
-
-\[
-\text{sim}(\mathbf{q}, \mathbf{v}_c) = \frac{\mathbf{q} \cdot \mathbf{v}_c}{\|\mathbf{q}\| \, \|\mathbf{v}_c\|}
-\]
+```
+sim(q, v_c) = (q ⋅ v_c) / (‖q‖ ⋅ ‖v_c‖)
+```
 
 ---
 
 ### 4. Retrieval
-Given a query \( q \), we embed it:
 
-\[
-\mathbf{q} = f(q)
-\]
+Given a user query `q`, we first embed it:
 
-We then retrieve the top‑\(k\) most similar chunks:
+```
+q = f(q)
+```
 
-\[
-R(q) = \operatorname{arg\,topk}_{c \in C} \; \text{sim}(\mathbf{q}, \mathbf{v}_c)
-\]
+We then retrieve the top-k most similar chunks:
+
+```
+R(q) = arg_topk_{c ∈ C} sim(q, v_c)
+```
 
 ---
 
 ### 5. Augmented Generation
-The retrieved chunks \( R(q) \) are concatenated with the query and passed to the LLM:
 
-\[
-\text{Answer}(q) = \text{LLM}\big(q \; \oplus \; R(q)\big)
-\]
+The retrieved chunks `R(q)` are concatenated with the query and passed to the language model:
 
-where \( \oplus \) denotes concatenation of query and retrieved context.
+```
+Answer(q) = LLM(q ⊕ R(q))
+```
+
+Here, `⊕` denotes the concatenation of the query and its retrieved context.
+
 
 ---
 
