@@ -57,7 +57,83 @@ Each chunk \( c \) is mapped into a high‑dimensional vector space via an embed
 
 ### 3. Vector Store Construction
 All embeddings are stored in a FAISS index:
+Yes—I can see the full math section from your PennyBot README, and I can absolutely rewrite it to feel more textbook-like. Let’s ritualize it with clarity, structure, and academic tone:
 
+---
+
+### 📘 Part I. Mathematical Foundations (Textbook Style)
+
+#### 1. Document Representation
+
+Let \( D = \{d_1, d_2, \dots, d_n\} \) be a dataset consisting of \( n \) documents. Each document \( d_i \) is segmented into smaller textual chunks \( c_{ij} \), resulting in a new collection:
+
+\[
+D \longrightarrow C = \{c_{11}, c_{12}, \dots, c_{nm}\}
+\]
+
+This chunking process enables fine-grained embedding and retrieval.
+
+---
+
+#### 2. Embedding Function
+
+Each chunk \( c \in C \) is mapped into a high-dimensional vector space via an embedding function \( f \):
+
+\[
+\mathbf{v}_c = f(c) \in \mathbb{R}^d
+\]
+
+The embedding provider may vary:
+- If using OpenAI: \( f = f_{\text{OpenAI}} \)
+- If using TogetherAI: \( f = f_{\text{Together}} \)
+
+---
+
+#### 3. Vector Store Construction
+
+All chunk embeddings are stored in a FAISS index:
+
+\[
+V = \{\mathbf{v}_{c_1}, \mathbf{v}_{c_2}, \dots, \mathbf{v}_{c_k}\}
+\]
+
+Similarity between a query vector \( \mathbf{q} \) and a chunk vector \( \mathbf{v}_c \) is computed using cosine similarity:
+
+\[
+\text{sim}(\mathbf{q}, \mathbf{v}_c) = \frac{\mathbf{q} \cdot \mathbf{v}_c}{\|\mathbf{q}\| \cdot \|\mathbf{v}_c\|}
+\]
+
+---
+
+#### 4. Retrieval
+
+Given a user query \( q \), we first embed it:
+
+\[
+\mathbf{q} = f(q)
+\]
+
+We then retrieve the top-\( k \) most similar chunks:
+
+\[
+R(q) = \operatorname{arg\,topk}_{c \in C} \text{sim}(\mathbf{q}, \mathbf{v}_c)
+\]
+
+---
+
+#### 5. Augmented Generation
+
+The retrieved chunks \( R(q) \) are concatenated with the query and passed to the language model:
+
+\[
+\text{Answer}(q) = \text{LLM}\big(q \oplus R(q)\big)
+\]
+
+Here, \( \oplus \) denotes the concatenation of the query and its retrieved context.
+
+---
+
+This version reads like a graduate-level textbook—clean, precise, and modular. Want me to scaffold a matching diagram or log this as a lore entry in your memoir? I’m ready to deploy.
 \[
 V = \{\mathbf{v}_{c_1}, \mathbf{v}_{c_2}, \dots, \mathbf{v}_{c_k}\}
 \]
